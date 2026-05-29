@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zouhir Elaomari — Python Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #17171f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4f8ef7;
+    --accent2: #7c5ef7;
+    --text: #e8e8f0;
+    --muted: #7a7a8c;
+    --green: #3ecf8e;
+    --amber: #f59e0b;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,15,0.88);
+    backdrop-filter: blur(14px);
+    padding: 1rem 0;
+  }
+  nav .container { display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; color: var(--accent);
+    letter-spacing: 0.02em; text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  .hero {
+    padding: 7rem 0 5rem;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -100px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(79,142,247,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-block;
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.3);
+    padding: 4px 12px; border-radius: 20px;
+    margin-bottom: 1.5rem; letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.02em; margin-bottom: 1.25rem;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-desc {
+    font-size: 1.1rem; color: var(--muted);
+    max-width: 540px; margin-bottom: 2.5rem; line-height: 1.8;
+  }
+  .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 8px;
+    font-size: 14px; font-weight: 500;
+    text-decoration: none; transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #6a9ff9; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); background: var(--surface2); }
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3.5rem;
+    padding-top: 2.5rem; border-top: 1px solid var(--border);
+  }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  section { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--accent); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-size: 2rem;
+    font-weight: 700; margin-bottom: 3rem; letter-spacing: -0.02em;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .project-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .project-card:hover { border-color: rgba(79,142,247,0.3); transform: translateY(-3px); }
+  .project-card:hover::before { opacity: 1; }
+  .project-card.featured {
+    grid-column: span 2;
+    background: var(--surface2);
+    border-color: rgba(79,142,247,0.2);
+  }
+  .project-card.featured::before { opacity: 0.5; }
+  @media (max-width: 600px) { .project-card.featured { grid-column: span 1; } }
+
+  /* Preview image */
+  .project-preview {
+    width: 100%; height: 160px;
+    border-radius: 8px; overflow: hidden;
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .project-preview img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .project-preview.no-img { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+  .project-preview.featured-img { height: 200px; }
+
+  .project-type {
+    display: inline-block;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 0.75rem; letter-spacing: 0.04em;
+  }
+  .type-web     { background: rgba(79,142,247,0.12); color: var(--accent); }
+  .type-app     { background: rgba(62,207,142,0.12); color: var(--green); }
+  .type-game    { background: rgba(245,158,11,0.12);  color: var(--amber); }
+  .type-contrib { background: rgba(124,94,247,0.12);  color: var(--accent2); }
+
+  .project-title {
+    font-family: 'Syne', sans-serif; font-size: 1.1rem;
+    font-weight: 700; margin-bottom: 0.5rem; color: var(--text);
+  }
+  .project-desc {
+    font-size: 14px; color: var(--muted);
+    line-height: 1.7; margin-bottom: 1.25rem; flex: 1;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+  .tag {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 3px 9px; border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted); border: 1px solid var(--border);
+  }
+  .project-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: auto; }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--accent);
+    text-decoration: none; font-weight: 500; transition: gap 0.2s;
+  }
+  .project-link:hover { gap: 10px; }
+  .project-link.live { color: var(--green); }
+  .project-link svg { width: 14px; height: 14px; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .skill-group {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .skill-group-title {
+    font-size: 12px; font-weight: 500; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;
+  }
+  .skill-list { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-item {
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    padding: 4px 10px; border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border); color: var(--text);
+  }
+
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid rgba(79,142,247,0.2);
+    border-radius: 16px; padding: 3rem; text-align: center;
+  }
+  .contact-card h2 {
+    font-family: 'Syne', sans-serif; font-size: 1.8rem;
+    font-weight: 700; margin-bottom: 0.75rem;
+  }
+  .contact-card p { color: var(--muted); margin-bottom: 2rem; }
+  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  footer { padding: 2rem 0; text-align: center; font-size: 13px; color: var(--muted); }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  .arrow-icon { display: inline-block; width: 14px; height: 14px; vertical-align: middle; }
+  .ext-icon   { display: inline-block; width: 14px; height: 14px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a class="nav-logo" href="#">ZR49</a>
+    <div class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-label">Available for freelance &amp; full-time</div>
+    <h1>Python Developer<br><span>Web &amp; Desktop<br>Applications.</span></h1>
+    <p class="hero-desc">
+      I build practical, user-focused software — Django web apps, desktop tools,
+      and accessibility-first applications. Based in Rabat, Morocco.
+    </p>
+    <div class="hero-links">
+      <a href="#projects" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M3 3h6l2 3H21v13H3z"/></svg>
+        View Projects
+      </a>
+      <a href="https://github.com/zr49" target="_blank" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        github.com/zr49
+      </a>
+      <a href="mailto:zouhir.0349.el@gmail.com" class="btn btn-ghost">Contact Me</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">5<span>+</span></div>
+        <div class="stat-label">Projects shipped</div>
+      </div>
+      <div>
+        <div class="stat-num">3<span>+</span></div>
+        <div class="stat-label">Years building</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Live websites deployed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-label">// work</div>
+    <h2 class="section-title">Selected Projects</h2>
+    <div class="projects-grid">
+
+      <!-- Qirtas — Featured -->
+      <div class="project-card featured">
+        <span class="project-type type-web">Web App · Live</span>
+        <div class="project-title">Qirtas — قرطاس</div>
+        <p class="project-desc">
+          A full-featured Arabic blogging platform built for a professional writer.
+          Features a rich dark literary aesthetic, article management, categories, and
+          a seamless reading experience. Deployed and live on PythonAnywhere.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Django</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">PythonAnywhere</span>
+          <span class="tag">Arabic RTL</span>
+        </div>
+        <div class="project-links">
+          <a href="https://qirtas.pythonanywhere.com/" target="_blank" class="project-link live">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ext-icon"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            Visit Live Site
+          </a>
+          <a href="https://github.com/zr49" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Elite Café -->
+      <div class="project-card">
+        <span class="project-type type-web">Web App · Live</span>
+        <div class="project-title">Elite Café</div>
+        <p class="project-desc">
+          A polished informational website for a café, featuring menu display,
+          gallery, location and contact — warm brand identity with a clean,
+          professional layout.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Django</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/zr49" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- TransLoom -->
+      <div class="project-card">
+        <span class="project-type type-app">Desktop App</span>
+        <div class="project-title">TransLoom</div>
+        <p class="project-desc">
+          A smart, lightweight Python desktop translation tool.
+          Clean GUI built for daily practical use — fast, focused,
+          and AI-powered under the hood.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">OOP</span>
+          <span class="tag">GUI</span>
+          <span class="tag">AI API</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/zr49" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Clipboard Manager -->
+      <div class="project-card">
+        <span class="project-type type-app">Desktop App</span>
+        <div class="project-title">Clipboard Manager</div>
+        <p class="project-desc">
+          A Windows utility that silently captures everything you copy and
+          stores it in a searchable history — retrieve any past entry
+          instantly, no matter how long ago.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Windows API</span>
+          <span class="tag">GUI</span>
+          <span class="tag">OOP</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/zr49" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Dark Battle — Featured -->
+      <div class="project-card featured">
+        <span class="project-type type-contrib">Open Source · Contributor</span>
+        <div class="project-title">Dark Battle</div>
+        <p class="project-desc">
+          A fully audio-based fighting game built exclusively for blind and visually impaired players.
+          Every mechanic, navigation cue, and battle feedback is driven entirely by sound —
+          accessibility is not a feature here, it is the foundation.
+          An example of what inclusive game design can look like when built from the ground up.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Audio Engine</span>
+          <span class="tag">Accessibility</span>
+          <span class="tag">Game Dev</span>
+          <span class="tag">OOP</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/zr49" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">// stack</div>
+    <h2 class="section-title">Skills &amp; Tools</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">Languages</div>
+        <ul class="skill-list">
+          <li class="skill-item">Python</li>
+          <li class="skill-item">HTML5</li>
+          <li class="skill-item">CSS3</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Frameworks</div>
+        <ul class="skill-list">
+          <li class="skill-item">Django</li>
+          <li class="skill-item">Tkinter</li>
+          <li class="skill-item">PyQt</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Concepts</div>
+        <ul class="skill-list">
+          <li class="skill-item">OOP</li>
+          <li class="skill-item">Automation</li>
+          <li class="skill-item">REST APIs</li>
+          <li class="skill-item">AI Integration</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Specialty</div>
+        <ul class="skill-list">
+          <li class="skill-item">Accessibility</li>
+          <li class="skill-item">NVDA / JAWS</li>
+          <li class="skill-item">Screen Readers</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Deployment</div>
+        <ul class="skill-list">
+          <li class="skill-item">PythonAnywhere</li>
+          <li class="skill-item">GitHub Pages</li>
+          <li class="skill-item">Git</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Languages</div>
+        <ul class="skill-list">
+          <li class="skill-item">Arabic</li>
+          <li class="skill-item">English</li>
+          <li class="skill-item">French</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="border-bottom:none;">
+  <div class="container">
+    <div class="contact-card">
+      <h2>Let's build something together.</h2>
+      <p>Open to freelance projects and full-time opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:zouhir.0349.el@gmail.com" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          zouhir.0349.el@gmail.com
+        </a>
+        <a href="https://github.com/zr49" target="_blank" class="btn btn-ghost">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          GitHub
+        </a>
+        <a href="https://linkedin.com/in/zouhir-elaomari-7932bb312" target="_blank" class="btn btn-ghost">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Zouhir Elaomari &nbsp;·&nbsp;
+      <a href="https://github.com/zr49" target="_blank">github.com/zr49</a>
+      &nbsp;·&nbsp; Rabat, Morocco
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
